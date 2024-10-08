@@ -13,6 +13,7 @@ import com.ead.authuser.enums.UserStatus;
 import com.ead.authuser.enums.UserType;
 import com.ead.authuser.models.User;
 import com.ead.authuser.services.UserSerivce;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import org.springframework.beans.BeanUtils;
 
@@ -26,7 +27,7 @@ public class AuthenticationController {
     private UserSerivce userService;
 
     @PostMapping("api/v1/register")
-    public ResponseEntity<Object> registerUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Object> registerUser(@RequestBody @JsonView(UserDTO.UserView.RegistrationPost.class) UserDTO userDTO) {
         System.out.println("UserDTO received: " + userDTO);
         if (userService.existsByEmail(userDTO.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Email is already in use!");
