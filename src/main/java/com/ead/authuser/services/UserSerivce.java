@@ -15,5 +15,8 @@ public interface UserSerivce {
 
     void delete(User user);
 
+    void save(User user);
+
+    boolean existsByEmail(String email);
 }
 
