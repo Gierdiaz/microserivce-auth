@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(originPatterns = "*", allowedHeaders = "*", maxAge = 3600)
+@CrossOrigin(originPatterns = "*", maxAge = 3600)
 public class UserController {
     @Autowired
     private UserSerivce userService;
