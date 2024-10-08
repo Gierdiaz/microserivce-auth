@@ -1,6 +1,10 @@
 package com.ead.authuser.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +27,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
 
@@ -34,8 +37,9 @@ public class UserController {
     private UserSerivce userService;
 
     @GetMapping("api/v1/users")
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
+    public ResponseEntity<Page<User>> getUsers(@PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<User> userPage = userService.findAll(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(userPage);
     }
     
     @GetMapping("api/v1/users/{userId}")
