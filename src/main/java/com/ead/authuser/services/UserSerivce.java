@@ -4,6 +4,10 @@ import com.ead.authuser.models.User;
 
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+
 import java.util.Optional;
 
 
@@ -18,5 +22,7 @@ public interface UserSerivce {
     void save(User user);
 
     boolean existsByEmail(String email);
+
+    Page<User> findAll(Pageable pageable);
 }
 
