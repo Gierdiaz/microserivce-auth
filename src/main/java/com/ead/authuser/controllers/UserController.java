@@ -3,6 +3,7 @@ package com.ead.authuser.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +50,7 @@ public class UserController {
     }
 
     @PutMapping("api/v1/users/{userId}")
-    public ResponseEntity<Object> updateUser(@PathVariable(value = "userId") UUID userId, @RequestBody @JsonView(UserView.UserPut.class) UserDTO userDTO) {
+    public ResponseEntity<Object> updateUser(@PathVariable(value = "userId") UUID userId, @RequestBody @Validated @JsonView(UserView.UserPut.class) UserDTO userDTO) {
         Optional<User> user = userService.FindById(userId);
 
         if(user.isPresent()) {
@@ -71,7 +72,7 @@ public class UserController {
     }
 
     @PutMapping("api/v1/users/{userId}/password")
-    public ResponseEntity<Object> updatePassword(@PathVariable(value = "userId") UUID userId, @RequestBody @JsonView(UserView.PasswordPut.class) UserDTO userDTO) {
+    public ResponseEntity<Object> updatePassword(@PathVariable(value = "userId") UUID userId, @RequestBody @Validated @JsonView(UserView.PasswordPut.class) UserDTO userDTO) {
         Optional<User> user = userService.FindById(userId);
 
         if(user.isPresent()) {
@@ -92,7 +93,7 @@ public class UserController {
     }
 
     @PutMapping("api/v1/users/{userId}/image")
-    public ResponseEntity<Object> updateImage(@PathVariable(value = "userId") UUID userId, @RequestBody @JsonView(UserView.ImagePut.class) UserDTO userDTO) {
+    public ResponseEntity<Object> updateImage(@PathVariable(value = "userId") UUID userId, @RequestBody @Validated @JsonView(UserView.ImagePut.class) UserDTO userDTO) {
         Optional<User> user = userService.FindById(userId);
 
         if(user.isPresent()) {
