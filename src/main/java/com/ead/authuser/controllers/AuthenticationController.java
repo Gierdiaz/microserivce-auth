@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @RestController
-@CrossOrigin(originPatterns = "*", allowedHeaders = "*", maxAge = 3600)
+@CrossOrigin(originPatterns = "*", maxAge = 3600)
 public class AuthenticationController {
     @Autowired
     private UserSerivce userService;
@@ -36,18 +36,16 @@ public class AuthenticationController {
 
         BeanUtils.copyProperties(userDTO, user);
         user.setUserStatus(UserStatus.ACTIVE);
-        user.setUserType(UserType.STUDENT);
+        user.setUserType(UserType.STUDENT); 
         user.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
         user.setUpdatedAt(LocalDateTime.now(ZoneId.of("UTC")));
         userService.save(user);
 
-        userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
-
-        // try {
-           
-        // } catch (Exception e) {
-        //     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: User could not be created.");
-        // }
+        try {     
+            userService.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: User could not be created.");
+        }
     }
 }
