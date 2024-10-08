@@ -3,6 +3,7 @@ package com.ead.authuser.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ public class AuthenticationController {
     private UserSerivce userService;
 
     @PostMapping("api/v1/register")
-    public ResponseEntity<Object> registerUser(@RequestBody @JsonView(UserDTO.UserView.RegistrationPost.class) UserDTO userDTO) {
+    public ResponseEntity<Object> registerUser(@RequestBody @Validated @JsonView(UserDTO.UserView.RegistrationPost.class) UserDTO userDTO) {
         System.out.println("UserDTO received: " + userDTO);
         if (userService.existsByEmail(userDTO.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Email is already in use!");
