@@ -9,6 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import org.springframework.hateoas.RepresentationModel;
 import com.ead.authuser.enums.UserStatus;
 import com.ead.authuser.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -20,10 +23,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User extends RepresentationModel<User> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id

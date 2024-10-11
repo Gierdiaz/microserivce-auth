@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
@@ -40,6 +43,11 @@ public class UserController {
     @GetMapping("api/v1/users")
     public ResponseEntity<Page<User>> getUsers(SpecificationTemplate.UserSpec spec, @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<User> userPage = userService.findAll(spec, pageable);
+        if (!userPage.isEmpty()) {
+            for(User user : userPage.toList()) {
+                user.add(linkTo(methodOn(UserController.class).getUserById(user.getUserId())).withSelfRel());
+            }
+        }
         return ResponseEntity.status(HttpStatus.OK).body(userPage);
     }
     
@@ -48,6 +56,7 @@ public class UserController {
         Optional<User> user = userService.FindById(userId);
 
         if(!user.isEmpty()) {
+            user.get().add(linkTo(methodOn(UserController.class).getUsers(null, Pageable.unpaged())).withSelfRel());
             return ResponseEntity.status(HttpStatus.OK).body(user.get());
         }
 
