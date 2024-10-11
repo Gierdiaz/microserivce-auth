@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
@@ -23,6 +24,7 @@ public interface UserSerivce {
 
     boolean existsByEmail(String email);
 
-    Page<User> findAll(Pageable pageable);
+    Page<User> findAll(Specification<User> spec ,Pageable pageable);
+  
 }
 
