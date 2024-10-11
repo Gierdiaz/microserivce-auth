@@ -20,6 +20,8 @@ import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(originPatterns = "*", maxAge = 3600)
@@ -28,10 +30,12 @@ public class AuthenticationController {
     private UserSerivce userService;
 
     @PostMapping("api/v1/register")
+    
     public ResponseEntity<Object> registerUser(@RequestBody @Validated @JsonView(UserDTO.UserView.RegistrationPost.class) UserDTO userDTO) {
-        System.out.println("UserDTO received: " + userDTO);
         if (userService.existsByEmail(userDTO.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Email is already in use!");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Error: Email is already in use!");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
 
         var user = new User();
@@ -41,13 +45,15 @@ public class AuthenticationController {
         user.setUserType(UserType.STUDENT); 
         user.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
         user.setUpdatedAt(LocalDateTime.now(ZoneId.of("UTC")));
-        userService.save(user);
 
         try {     
             userService.save(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: User could not be created.");
+            e.printStackTrace();
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Error: User could not be created.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }
